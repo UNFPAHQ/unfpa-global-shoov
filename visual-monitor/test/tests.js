@@ -74,7 +74,7 @@ describe('Visual monitor testing', function() {
             '.carousel ul li:nth-child(2)',
             '.carousel ul li:nth-child(3)',
             '.slider-for',
-            '.attachment > .view-content',
+            '.attachment-after .item-list',
             // stay connected.
             '.stay_connected img',
             // News panel
