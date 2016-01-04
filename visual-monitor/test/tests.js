@@ -109,7 +109,7 @@ describe('Visual monitor testing', function() {
             '.pane-vw-events .date-display-single',
             '.pane-vw-events .views-field-title',
           ],
-        screenWidth: selectedCaps == 'chrome' ? [640, 960, 1200] : undefined,
+        screenWidth: selectedCaps == 'chrome' ? [960, 1200] : undefined,
       }, resultsCallback)
       .call(done);
   });
