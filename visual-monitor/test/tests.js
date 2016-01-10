@@ -106,8 +106,8 @@ describe('Visual monitor testing', function() {
             '.pane-vw-publications .title',
             '.pane-vw-publications .summary',
             // Events
-            '.pane-vw-events .date-display-single',
-            '.pane-vw-events .views-field-title',
+            '.pane-custom-custom-home-event-block .date-display-single',
+            '.pane-custom-custom-home-event-block .views-field-title',
           ],
         screenWidth: selectedCaps == 'chrome' ? [960, 1200] : undefined,
       }, resultsCallback)
