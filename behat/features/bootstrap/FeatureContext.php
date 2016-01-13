@@ -399,7 +399,7 @@ class FeatureContext extends MinkContext implements SnippetAcceptingContext {
    */
   public function iDoAnActionOnColumnFromChartName($action, $chartColumn, $chartName) {
     $page = $this->getSession()->getPage();
-
+    sleep(10);
     // Check the svg region to hover/click on.
     switch($chartColumn) {
       case "non-core resources":
