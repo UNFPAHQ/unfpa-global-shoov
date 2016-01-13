@@ -1,11 +1,20 @@
 <?php
 
-use Drupal\DrupalExtension\Context\DrupalContext;
+use Drupal\DrupalExtension\Context\MinkContext;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
+use GuzzleHttp\Client;
+use Behat\Behat\Tester\Exception\PendingException;
 
-class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
+class FeatureContext extends MinkContext implements SnippetAcceptingContext {
+
+  /**
+   * @Given I am an anonymous user
+   */
+  public function iAmAnAnonymousUser() {
+    // Just let this pass-through.
+  }
 
   /**
    * @When /^I visit the homepage$/
@@ -15,9 +24,16 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   }
 
   /**
-   * @Then I should see the :arg1 with the :arg2 and have access to the link destination
+   * Get the anchor element by it's text and it's relative parent element.
+   *
+   * @param $section
+   *  The anchor element relative parent element.
+   * @param $link_text
+   *  The anchor element text.
+   * @return mixed|null
+   * @throws Exception
    */
-  public function iShouldSeeTheWithTheAndHaveAccessToTheLinkDestination($section, $link_text) {
+  private function getLinkElement($section, $link_text) {
     $page = $this->getSession()->getPage();
 
     switch ($section) {
@@ -65,11 +81,19 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
         $link = FALSE;
     }
 
-    // In case we have no links.
+    // In case we have no link.
     if (!$link) {
-      $variables = array('@section' => $section, '@link' => $link_text);
-      throw new \Exception(format_string("The link: '@link' was not found on section: '@section'", $variables));
+      throw new \Exception("The link: " . $link_text . " was not found on section: " . $section);
     }
+    return $link;
+  }
+
+  /**
+   * @Then I should see the :arg1 with the :arg2 and have access to the link destination
+   */
+  public function iShouldSeeTheWithTheAndHaveAccessToTheLinkDestination($section, $link_text) {
+
+    $link = $this->getLinkElement($section, $link_text);
 
     // Check if we have access to the page (link url).
     $link->click();
@@ -77,13 +101,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     $code = $this->getSession()->getStatusCode();
     // In case the link url doesn't return a status code of '200'.
     if ($code != '200')  {
-      $variables = array(
-        '@code' => $code,
-        '@url' => $url,
-        '@section' => $section,
-      );
-      $message = "The page code is '@code' it expects it to be '200' (from url: @url at section: @section)";
-      throw new \Exception(format_string($message, $variables));
+      throw new \Exception("The page code is " . $code . " it expects it to be '200' (from url: " . $url . " at section: " . $section);
     }
   }
 
@@ -91,6 +109,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    * @When I visit the homepage and I pick the language :arg1
    */
   public function iVisitTheHomepageAndIPickTheLanguage($language) {
+    $this->iVisitTheHomepage();
 
     // In case no language was supplied as an argument.
     if (empty($language)) {
@@ -104,7 +123,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
 
     // In case no link was found for the target language.
     if (!$language_link) {
-      throw new \Exception(format_string("No language link was found for the language: @language", array('@language' => $language)));
+      throw new \Exception("No language link was found for the language: " .$language);
     }
 
     // Preserve the current language.
@@ -127,11 +146,8 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
         foreach ($links as $index => $link) {
           // In case the link text is not translated accordingly.
           if (!in_array($link->getText(), $translated_text)) {
-            $variables = array(
-              '@translation' => $link->getText(),
-              '@number' => $index + 1,
-            );
-            throw new \Exception(format_string("The translation: '@translation' for link number: @number was not found", $variables));
+            $number = $index + 1;
+            throw new \Exception("The translation: " . $link->getText() ." for link number: " . $number  . "  was not found");
           }
         }
         break;
@@ -139,7 +155,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
       case 'slogan':
         $slogan = $page->find('xpath', '//section[@id="main"]//p[@class="unfpa-slogan"]');
         if (strpos($slogan->getHtml(), $text) === false) {
-          throw new \Exception(format_string("The slogan: '@slogan' was not found", array('@slogan' => $text)));
+          throw new \Exception("The slogan: " . $text . " was not found");
         }
         break;
 
@@ -148,12 +164,12 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
 
         // In case the image 'alt'' attribute is in incorrect.
         if (strpos($logo_image->getAttribute('alt'), $text ) === false) {
-          throw new \Exception(format_string("The logo image alt text: '@text' was not found", array('@text' => $text)));
+          throw new \Exception("The logo image alt text: " . $text . " was not found");
         }
         break;
 
       default:
-        throw new \Exception(format_string("The section: @section isn't valid", array('@section' => $section)));
+        throw new \Exception("The section: " . $section . " isn't valid");
     }
   }
 
@@ -165,81 +181,15 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   }
 
   /**
-   * @When I fill :arg1 in the year field and :arg2 in the Programme Activities field
+   * @Then I should see the portal title :arg1
    */
-  public function iFillYearInTheYearFieldAndActivitiesInTheProgrammeActivitiesField($year, $activities) {
-    $page_url = $this->getSession()->getCurrentUrl();
-    $page = $this->getSession()->getPage();
-    $activities_checkboxes = array(
-      'Integrated SRH services' => '#edit-s01',
-      'Adolescents and youth' => '#edit-s02',
-    );
-
-    // Select the year value in the year select.
-    if (!$year_select = $page->findById('edit-year')) {
-      throw new \Exception(format_string("Could not find the Year field at '@url'.", array('@url' => $page_url)));
-    }
-    $year_select->selectOption($year);
-
-    // Open Programme Activities.
-    if (!$activities_select = $page->find('css', '.select-activity')) {
-      throw new \Exception(format_string("Could not find the field `Programme Activities` at '@url'.", array('@url' => $page_url)));
-    }
-    $activities_select->click();
-
-    // Choose specific activity.
-    if (!$activities_select_checkboxes = $page->find('css', $activities_checkboxes[$activities] . ' .activities-checkboxes')) {
-      throw new \Exception(format_string("Could not find the checkboxes '@activities' at '@url'.", array('@activities' => $activities, '@url' => $page_url)));
-    }
-    // Click to uncheck all the checkboxes - depend on the activities.
-    $activities_select_checkboxes->unCheck();
-    // Click to check one of the checkboxes.
-    $activities_select_checkboxes->check();
-
-    // Submit the form.
-    if (!$submit_button = $page->findById('edit-submit')) {
-      throw new \Exception(format_string("Could not find the Submit button at '@url'.", array('@url' => $page_url)));
-    }
-    $submit_button->click();
-
-    $this->iWaitForCssElement("#active-activities","appear");
-  }
-
-  /**
-   * @Then I should see the title :arg1
-   */
-  public function iShouldSeeTheTitle($title) {
-    $page_url = $this->getSession()->getCurrentUrl();
+  public function iShouldSeeThePortalTitle($title_text) {
     $page = $this->getSession()->getPage();
 
-    // Get the title page.
-    if (!$text = $page->getText()) {
-      throw new \Exception(format_string("The title: '@title' was not found in '@url' after search for the same activities.", array('@title' => $title, '@url' => @$page_url)));
+    $this->iWaitForCssElement('#active-activities', "appear");
+    if (!strpos($page->getText(), $title_text)) {
+      throw new \Exception("Could not find the " . $title_text ." at " . $this->getSession()->getCurrentUrl());
     }
-  }
-
-  /**
-   * @When I click on :arg1 button and :arg2 link in the menu
-   */
-  public function iClickOnPencilButtonAndRegionLinkInTheMenu($pencil, $region){
-    $page_url = $this->getSession()->getCurrentUrl();
-    $page = $this->getSession()->getPage();
-    $countries = array(
-      "Argentina" => "unfpa-argentina",
-      "Thailand" => "unfpa-thailand",
-    );
-
-    // Click the countries index button.
-    if (!$button = $page->find('css', '.' . $pencil)) {
-      throw new \Exception(format_string("Could not find the `Select region, country or territory` button at '@url'.", array('@url' => $page_url)));
-    }
-    $button->click();
-
-    // click the country link.
-    if (!$country_link = $page->find('css', 'a[href="transparency-portal/' . $countries[$region] . '"]')) {
-      throw new \Exception(format_string("Could not find the '@country' link in `Select region, country or territory` button at '@url'.", array('@country' => $region, '@url' => $page_url)));
-    }
-    $country_link->click();
   }
 
   /**
@@ -251,7 +201,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
 
     // Click the Donut tab.
     if (!$chart_tabs = $page->find('css', 'li[tabfor="' . $button . '"]')) {
-      throw new \Exception(format_string("Could not find the '@core' button in `donut_chart_tab` button at '@url'.", array('@core' => $button, '@url' => $page_url)));
+      throw new \Exception("Could not find the " . $button . " button in `donut_chart_tab` button at ". $page_url);
     }
     $chart_tabs->click();
   }
@@ -326,8 +276,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
 
     // In case pin isn't found on the map.
     if (!$pin = $page->find('xpath', '//div[@id="unfpa_worldwide"]//div[@class="map-wrapper"]' . $by_type . $by_country)) {
-      $variables = array('@country' => $country, '@type' => $type);
-      throw new \Exception(format_string("The pin form type: '@type' with country: '@country' was not found on the map", $variables));
+      throw new \Exception("The pin form type: " . $type . " with country: " . $country . " was not found on the map");
     }
   }
 
@@ -340,7 +289,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
 
     // Get the pagination button
     if(!$button = $page->findLink("Go to page " . $page_number)) {
-      throw new Exception(format_string("The pagination button '@number' was not found on the page '@url'", array('@number' => $page_number, '@url' => $page_url)));
+      throw new Exception("The pagination button " .  $page_number . " was not found on the page " . $page_url);
     }
     $button->click();
   }
@@ -354,7 +303,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
 
     // Get the pagination button.
     if($button = $page->findLink("Go to page " . $page_number)) {
-      throw new Exception(format_string("The pagination button '@number' is active at '@url'", array('@number' => $page_number, '@url' => $page_url)));
+      throw new Exception("The pagination button " . $page_number . " is active at " . $page_url);
     }
   }
 
@@ -368,15 +317,12 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     foreach ($table->getRows() as $filters => $filter_data) {
 
       // Get the filter data: (name, element selector ,value).
-      list($filter_name, $filter_id, $filter_value) = $filter_data;
+      list($filter_name, $filter, $filter_value) = $filter_data;
 
       // In case the target element is not found.
-      if (!$element = $page->findById($filter_id)) {
-        $variables = array(
-          '@name' => $filter_name,
-          '@id' => $filter_id,
-        );
-        throw new \Exception(format_string("The '@name' filter field with id: '@id' was not found", $variables));
+      $element = $page->find('css', $filter);
+      if (!$element) {
+        throw new \Exception("The " . $filter_name . " filter field with id: " . $filter . " was not found");
       }
       $this->setElementValue($element, $filter_value);
     }
@@ -401,7 +347,12 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     // Flag to identify if an element was set with a value.
     switch ($tag_name) {
       case 'input':
-        $element->setValue($value);
+        if ($element->getAttribute('type') === 'checkbox') {
+          $element->click();
+        } else {
+          // The default input type is text.
+          $element->setValue($value);
+        }
         $element_is_set = TRUE;
         break;
 
@@ -410,18 +361,78 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
         $element_is_set = TRUE;
         break;
 
+      case 'div':
+        $element->click();
+        $element_is_set = TRUE;
+        break;
+
       default:
         $element_is_set = FALSE;
     }
 
     if (!$element_is_set) {
-      $variables = array(
-        '@xpath' => $element->getXpath(),
-        '@value' =>$value,
-      );
-      throw new \Exception(format_string("The element: '@xpath' was not set with the value: '@value'", $variables));
+      throw new \Exception("The element: " . $element->getXpath() . " was not set with the value: " .$value);
     }
 
     return $element_is_set;
+  }
+
+  /**
+   * @Then /^I should see text:$/
+   */
+  public function iShouldSeeText(TableNode $table) {
+    // Iterate over each title and check if it's in the page.
+    foreach ($table->getRows() as $titles) {
+      foreach ($titles as $title) {
+        if (strpos($this->getSession()
+            ->getPage()
+            ->getText(), $title) === FALSE
+        ) {
+          throw new \Exception("Can't find the text " . $title . " on the page: " . $this->getSession()->getCurrentUrl());
+        }
+      }
+    }
+  }
+
+  /**
+   * @When I :arg1 on :arg2 from :arg3 chart
+   */
+  public function iDoAnActionOnColumnFromChartName($action, $chartColumn, $chartName) {
+    $page = $this->getSession()->getPage();
+
+    // Check the svg region to hover/click on.
+    switch($chartColumn) {
+      case "non-core resources":
+        $item = $page->find('xpath', '//div[@id="chart_div"]//*[local-name() = "svg"]//*[local-name()="rect" and @fill="#e0decd" and @width="47"]');
+        break;
+
+      case "UNFPA":
+        $item = $page->find('xpath', '//div[@id="implemented-all"]//*[local-name() = "svg"]//*[local-name()="rect" and @fill="#f7931d" and @width="48"]');
+        break;
+
+      case "Latin America":
+        $item = $page->find('xpath', '//div[@id="map_inner"]//*[@class="sm_state_BR"]');
+        break;
+
+      case "Asia":
+        $item = $page->find('xpath', '//div[@id="map_inner"]//*[@class="sm_state_PK"]');
+        break;
+    }
+
+    // Check if the svg item was found on the page.
+    if (!$item) {
+      throw new \Exception("The " .$chartColumn . " was not found in " . $chartName);
+    }
+
+    // Check if it needs to click on or hover on the svg item.
+    switch($action) {
+      case "hover":
+        $item->mouseOver();
+        break;
+
+      case "click":
+        $item->click();
+        break;
+    }
   }
 }

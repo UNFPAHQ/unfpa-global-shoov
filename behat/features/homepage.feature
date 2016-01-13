@@ -10,15 +10,41 @@ Feature:
     Then  I should see the "<section>" with the "<link>" and have access to the link destination
 
   Examples:
-    | section         | link                                            |
-    | news            | 507 maternal deaths take place every day        |
-    | news            | Post-rape care needed to protect against HIV    |
-    | news            | More News                                       |
-    | publications    | GBViE Standards                                 |
-    | publications    | State of World Population 2015                  |
-    | publications    | More Publications                               |
-    | videos          | Good Health and Well-being                      |
-    | videos          | More Videos                                     |
-    | events          | World AIDS Day                                  |
-    | events          | Global Conference on Ending Violence            |
-    | events          | Browse all Events                               |
+    | section             | link                                         |
+    | main menu           | Home                                         |
+    | main menu           | About                                        |
+    | main menu           | Topics                                       |
+    | main menu           | Emergencies                                  |
+    | main menu           | News                                         |
+    | main menu           | Publications                                 |
+    | main menu           | Press centre                                 |
+    | sub menu            | Funds and funding                            |
+    | sub menu            | Evaluation                                   |
+    | sub menu            | UN Population Award                          |
+    | sub menu            | Crisis in Syria                              |
+    | sub menu            | All emergencies                              |
+    | sub menu            | South Sudan Emergency                        |
+    | news                | 507 maternal deaths take place every day     |
+    | news                | More News                                    |
+    | publications        | GBViE Standards                              |
+    | publications        | State of World Population 2015               |
+    | publications        | More Publications                            |
+    | videos              | Good Health and Well-being                   |
+    | videos              | More Videos                                  |
+    | events              | Global Conference on Ending Violence         |
+    | events              | Browse all Events                            |
+    | footer              | Events                                       |
+    | footer              | Videos                                       |
+    | footer              | Contact                                      |
+    | footer              | Site map                                     |
+    | footer              | Terms of use                                 |
+    | footer              | state of world population                    |
+    | footer              | Safe birth. Even here.                       |
+    | footer              | World Population Dashboard                   |
+    | footer social links | Newsletter                                   |
+    | footer social links | Twitter                                      |
+    | footer social links | Facebook                                     |
+    | footer social links | LinkedIn                                     |
+    | footer social links | Gplus                                        |
+    | footer social links | Youtube                                      |
+

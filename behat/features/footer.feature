@@ -11,7 +11,6 @@ Feature:
 
     Examples:
       | section             | link                          |
-      | footer              | Jobs                          |
       | footer              | Events                        |
       | footer              | Videos                        |
       | footer              | Contact                       |

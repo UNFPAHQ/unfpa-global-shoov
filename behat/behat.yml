@@ -7,6 +7,9 @@ default:
     Behat\MinkExtension:
       goutte: ~
       selenium2: ~
+#    Drupal\DrupalExtension:
+#      blackbox: ~
+#      api_driver: "drupal"
 
 imports:
   - behat.local.yml
