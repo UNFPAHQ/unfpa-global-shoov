@@ -50,6 +50,5 @@ Feature:
 
     Examples:
       | chart title                         | chart column       | action | result                                       |
-      | Programme expenses by resource type | non-core resources | hover  | non-core resources:$482,983,071              |
       | World Map                           | Latin America      | hover  | Latin America & the Caribbean                |
       | World Map                           | Asia               | hover  | Asia & the Pacific                           |
