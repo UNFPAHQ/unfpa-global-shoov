@@ -44,7 +44,6 @@ Feature:
     | footer social links | Newsletter                                   |
     | footer social links | Twitter                                      |
     | footer social links | Facebook                                     |
-    | footer social links | LinkedIn                                     |
     | footer social links | Gplus                                        |
     | footer social links | Youtube                                      |
 
