@@ -7,10 +7,7 @@ Feature:
   Scenario: Check that we get a default set of articles that appear on the page.
     Given I am an anonymous user
     When  I visit the "news" page
-    Then  I should see text:
-      | Security Council calls for youth role in building peace, ending violence  |
-      | Post-rape care needed to protect against HIV in conflict-affected Ukraine |
-      | Empowering girls to take a stand against violence, abuse                  |
+    Then  I should have access to the page
 
   @api
   Scenario: Check the articles filters.

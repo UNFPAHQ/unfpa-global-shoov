@@ -24,6 +24,13 @@ class FeatureContext extends MinkContext implements SnippetAcceptingContext {
   }
 
   /**
+   * @Then I should have access to the page
+   */
+  public function iShouldHaveAccessToThePage() {
+    $this->assertSession()->statusCodeEquals('200');
+  }
+
+  /**
    * Get the anchor element by it's text and it's relative parent element.
    *
    * @param $section

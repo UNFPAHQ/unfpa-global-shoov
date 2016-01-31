@@ -24,7 +24,6 @@ Feature:
     | sub menu            | Crisis in Syria                              |
     | sub menu            | All emergencies                              |
     | sub menu            | South Sudan Emergency                        |
-    | news                | 507 maternal deaths take place every day     |
     | news                | More News                                    |
     | publications        | GBViE Standards                              |
     | publications        | State of World Population 2015               |
