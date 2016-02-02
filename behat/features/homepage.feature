@@ -30,7 +30,6 @@ Feature:
     | publications        | More Publications                            |
     | videos              | Good Health and Well-being                   |
     | videos              | More Videos                                  |
-    | events              | Global Conference on Ending Violence         |
     | events              | Browse all Events                            |
     | footer              | Events                                       |
     | footer              | Videos                                       |
