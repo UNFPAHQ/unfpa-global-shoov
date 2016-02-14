@@ -78,8 +78,6 @@ describe('Visual monitor testing', function() {
             '.attachment-after .item-list',
             // stay connected.
             '.stay_connected img',
-            // News panel
-            '.pane-vw-news img',
             // Video pane
             '.pane-vw-video .media-youtube-video',
             // Latest Publications
@@ -99,6 +97,7 @@ describe('Visual monitor testing', function() {
             '.unfpa-slogan',
             // News panel
             '.pane-vw-news .title',
+            '.pane-vw-news img',
             '.pane-vw-news .summary',
             '.pane-vw-news .date-display-single',
             // Video pane
