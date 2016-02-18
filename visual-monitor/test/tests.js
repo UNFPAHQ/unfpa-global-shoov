@@ -90,6 +90,8 @@ describe('Visual monitor testing', function() {
             // Map
             '#block-custom-map-custom-home-map .pin',
             '.panel-col-center',
+            // News
+            '.pane-vw-news .pane-content'
           ],
         hide:
           [
