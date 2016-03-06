@@ -64,7 +64,7 @@ describe('Visual monitor testing', function() {
   it('should show the home page',function(done) {
     client
       .url(baseUrl)
-      .pause(2000)
+      .pause(15000)
       .webdrivercss(testName + '.homepage', {
         name: '1',
         exclude:
@@ -88,7 +88,7 @@ describe('Visual monitor testing', function() {
         remove:
           [
             // Map
-            '#block-custom-map-custom-home-map .pin',
+            '#block-custom-map-custom-home-map',
             '.panel-col-center',
             // News
             '.pane-vw-news .pane-content'
