@@ -25,8 +25,6 @@ Feature:
     | sub menu            | All emergencies                              |
     | sub menu            | South Sudan Emergency                        |
     | news                | More News                                    |
-    | publications        | GBViE Standards                              |
-    | publications        | State of World Population 2015               |
     | publications        | More Publications                            |
     | videos              | Good Health and Well-being                   |
     | videos              | More Videos                                  |
