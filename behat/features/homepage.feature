@@ -34,7 +34,7 @@ Feature:
     | footer              | Contact                                      |
     | footer              | Site map                                     |
     | footer              | Terms of use                                 |
-    | footer              | state of world population                    |
+    | footer              | State of World Population                    |
     | footer              | Safe birth. Even here.                       |
     | footer              | World Population Dashboard                   |
     | footer social links | Newsletter                                   |
