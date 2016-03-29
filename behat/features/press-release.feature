@@ -13,7 +13,6 @@ Feature:
     | title                                                 |
     | Essential Health Needs of Women Often Neglected       |
     | Maternal death ratio has fallen                       |
-    | As Europe’s Refugee Crisis Worsens                    |
 
   @api
   Scenario: Check the articles filters.
