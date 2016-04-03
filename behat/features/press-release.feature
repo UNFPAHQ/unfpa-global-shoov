@@ -12,7 +12,6 @@ Feature:
   Examples:
     | title                                                 |
     | Essential Health Needs of Women Often Neglected       |
-    | Maternal death ratio has fallen                       |
 
   @api
   Scenario: Check the articles filters.
