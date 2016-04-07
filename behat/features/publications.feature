@@ -12,7 +12,6 @@ Feature:
   Examples:
     | title                                             |
     | Trends in Maternal Mortality: 1990 to 2015        |
-    | HIV and young people who inject drugs             |
 
 
   @javascript
