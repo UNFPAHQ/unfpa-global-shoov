@@ -11,7 +11,6 @@ Feature:
 
   Examples:
     | country     | type          |
-    | Mexico      | topics        |
     | Panama      | regional      |
     | Jamaica     | sub-regional  |
     | Switzerland | liaison       |
