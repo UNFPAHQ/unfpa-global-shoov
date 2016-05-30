@@ -22,13 +22,6 @@ Feature:
     And   I click "Argentina"
     Then  I should see "UNFPA Argentina"
 
-  @javascript
-  Scenario: Visit Transparency Portal page, and check resources hover
-    Given I am an anonymous user
-    When  I visit the "transparency-portal" page
-    And   I click on "core" tab
-    Then  I should see "2014 worldwide programme expenses (core)"
-
   @api
   Scenario Outline: Visit Transparency Portal page, and check region selector
     Given I am an anonymous user

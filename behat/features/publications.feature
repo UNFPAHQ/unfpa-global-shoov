@@ -3,17 +3,6 @@ Feature:
   As an anonymous user
   We need to be able to have access to the publications page
 
-  @api
-  Scenario Outline: Check that we get a default set of articles that appear on
-  the page when we have no filters.
-    Given I am an anonymous user
-    When  I visit the "publications" page
-    Then  I should see "<title>"
-  Examples:
-    | title                                             |
-    | Trends in Maternal Mortality: 1990 to 2015        |
-
-
   @javascript
   Scenario: Check the articles filters.
     Given I am an anonymous user
