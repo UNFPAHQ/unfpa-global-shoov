@@ -31,7 +31,6 @@ Feature:
 
     Examples:
       | tab name      | paragraph                                                               |
-      | Annual Report | RENEWING COMMITMENTS TO THE HEALTH AND RIGHTS OF WOMEN AND YOUNG PEOPLE |
       | Total need    | This map shows each country's or territory's need for UNFPA support     |
 
   @javascript

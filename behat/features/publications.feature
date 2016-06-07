@@ -8,9 +8,9 @@ Feature:
     Given I am an anonymous user
     When  I visit the "publications" page
     And   I set the filters:
-      | text          | #edit-combine                                 | UN report on obstetric fistula 2014 |
-      | date          | #edit-field-publication-date-value-value-year | 2015                                |
-      | thematic area | #edit-field-thematic-area-tid-i18n            | -Family planning                    |
-      | type          | #edit-field-type-of-publication-value         | State of World Population           |
+      | text          | #edit-combine                                 | Adolescent Boys and Young Men       |
+      | date          | #edit-field-publication-date-value-value-year | 2016                                |
+      | thematic area | #edit-field-thematic-area-tid-i18n            | -Comprehensive sexuality education  |
+      | type          | #edit-field-type-of-publication-value         | Publication                         |
     And   I press "Go"
-    Then  I should see "State of World Population 2015"
+    Then  I should see "Adolescent Boys and Young Men"
