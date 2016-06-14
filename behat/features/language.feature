@@ -13,9 +13,9 @@ Feature:
 
   Examples:
     | language  | section         | text                                                                              |
-    | EN        | navigation links | Home, About, Topics, Emergencies, News, Publications, Press centre                |
-    | ES        | navigation links | Inicio, Acerca de, Temas, Emergencias, Noticias, Publicaciones, Centro de prensa  |
-    | FR        | navigation links | Accueil, À propos, Thèmes, Urgences, Actualités, Publications, Centre de presse   |
+    | EN        | navigation links | Home, About, Topics, Emergencies, News, Publications, Media centre                |
+    | ES        | navigation links | Inicio, Acerca de, Temas, Emergencias, Noticias, Publicaciones, Media centre  |
+    | FR        | navigation links | Accueil, À propos, Thèmes, Urgences, Actualités, Publications, Media centre   |
 
 
   @api
