@@ -17,7 +17,7 @@ Feature:
     | main menu           | Emergencies                                  |
     | main menu           | News                                         |
     | main menu           | Publications                                 |
-    | main menu           | Press centre                                 |
+    | main menu           | Media centre                                 |
     | sub menu            | Funds and funding                            |
     | sub menu            | Evaluation                                   |
     | sub menu            | UN Population Award                          |
