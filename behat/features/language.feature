@@ -14,7 +14,7 @@ Feature:
   Examples:
     | language  | section         | text                                                                              |
     | EN        | navigation links | Home, About, Topics, Emergencies, News, Publications, Media centre                |
-    | ES        | navigation links | Inicio, Acerca, Temas, Emergencias, Publicaciones, Noticias, Media centre  |
+    | ES        | navigation links | Inicio, Acerca de, Temas, Emergencias, Publicaciones, Noticias, Media centre  |
     | FR        | navigation links | Accueil, À propos, Thèmes, Urgences, Actualités, Publications, Media centre   |
 
 
